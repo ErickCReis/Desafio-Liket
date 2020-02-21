@@ -1,16 +1,13 @@
 package com.example.gitrepos
 
 import android.os.Bundle
-import android.os.StrictMode
+import android.util.JsonToken
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.android.volley.Request
 import com.android.volley.Response
-import com.android.volley.toolbox.StringRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
-import java.io.InputStream
-import java.net.URL
-import java.net.URLConnection
+import org.json.JSONObject
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,17 +23,32 @@ class MainActivity : AppCompatActivity() {
         val url = "https://api.github.com/search/repositories?q=language:swift&sort=stars"
 
         // Request a string response from the provided URL.
-        val stringRequest = StringRequest(
-            Request.Method.GET,
+        val stringRequest = JsonObjectRequest(
             url,
-            Response.Listener<String> { response ->
-                println(response)
+            null,
+            Response.Listener<JSONObject> { response ->
+                textView.text = "Request Complete!"
+
+                val items = response.getJSONArray("items")
+                for (i in 0 until items.length()) {
+                    val item = JSONObject(items.getString(i))
+                    val owner = item.getJSONObject("owner")
+
+                    val name = item.get("name")
+                    val stars = item.get("stargazers_count")
+                    val login = owner.get("login")
+                    val avatar = owner.get("avatar_url")
+
+                    println("Nome: $name \n" +
+                            "Stars: $stars \n" +
+                            "Logim: $login \n" +
+                            "Avatar: $avatar")
+                }
             },
             Response.ErrorListener { textView.text = "That didn't work!" })
 
         // Add the request to the RequestQueue.
         queue.add(stringRequest)
-
     }
 }
 
