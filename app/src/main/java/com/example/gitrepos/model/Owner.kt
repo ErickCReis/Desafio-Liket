@@ -1,14 +1,12 @@
 package com.example.gitrepos.model
 
-import android.media.Image
+import android.graphics.Bitmap
 import com.google.gson.annotations.SerializedName
 
 data class Owner (
     @SerializedName("login")
-    var login: String,
+    val login: String,
     @SerializedName("avatar_url")
-    var avatarUrl: String,
-    @SerializedName("url")
-    var url: String,
-    var avatar: Image
+    val avatarUrl: String,
+    var avatar: Bitmap
 )
