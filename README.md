@@ -1,12 +1,12 @@
 ## Desafio-Liket
 
 App para exibir dados de repositórios do GitHub.
-
-_minSdkVersion 26_
-
+<p align=center>
+  <img src="screenshot.png"  height="400"/>
+</p>
 ---
 
-### Bibliotecas
+### Dependências
 
 **[RetroFit + Gson Converter](https://github.com/square/retrofit)** (v2.6.0)
 
