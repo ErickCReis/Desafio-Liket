@@ -4,7 +4,6 @@ App para exibir dados de repositórios do GitHub.
 <p align=center>
   <img src="screenshot.png"  height="400"/>
 </p>
----
 
 ### Dependências
 
