@@ -1,8 +1,10 @@
 package com.example.gitrepos.view
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gitrepos.R
@@ -39,6 +41,11 @@ class ItemViewHolder (inflater: LayoutInflater, parent: ViewGroup) :
         userText.text = item.owner.login
         projectText.text = item.name
         starsText.text = "Stars: ${item.stargazersCount}"
-        image.setImageBitmap(item.owner.avatar)
+        if(item.owner.avatar != null)
+        {
+            image.setImageBitmap(item.owner.avatar)
+            val imageProgressBar: ProgressBar = itemView.findViewById(R.id.imageProgressBar)
+            imageProgressBar.visibility = View.INVISIBLE
+        }
     }
 }

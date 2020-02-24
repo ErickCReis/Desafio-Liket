@@ -8,5 +8,5 @@ data class Owner (
     val login: String,
     @SerializedName("avatar_url")
     val avatarUrl: String,
-    var avatar: Bitmap
+    var avatar: Bitmap?
 )

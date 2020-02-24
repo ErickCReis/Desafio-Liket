@@ -1,6 +1,9 @@
 package com.example.gitrepos.view
 
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,6 +17,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.rxkotlin.toObservable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import okhttp3.ResponseBody
 import retrofit2.*
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
@@ -39,7 +43,6 @@ class MainActivity : AppCompatActivity() {
     private fun initView() {
         recyclerView.layoutManager = LinearLayoutManager(this)
         recyclerView.visibility = View.INVISIBLE
-
     }
 
     private fun getData() {
@@ -64,48 +67,44 @@ class MainActivity : AppCompatActivity() {
         progressBar.visibility = View.INVISIBLE
         recyclerView.visibility = View.VISIBLE
 
-
         itemsList.toObservable()
             .subscribeBy(
                 onNext = {
-                    println(it)
+                    getAvatar(it.owner.avatarUrl, itemsList.indexOf(it))
                 },
 
                 onError = {
                     it.printStackTrace()
-                },
-
-                onComplete = {
-                    println("onComplete!")
                 }
             )
+    }
+
+    private fun getAvatar(avatarUrl: String, id: Int) {
+
+        val retrofitClient = Retrofit.Builder()
+            .baseUrl("http://example.com/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        val endpoint = retrofitClient.create(RepositoryService::class.java)
+        val callback = endpoint.getAvatar(avatarUrl)
+
+        callback.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                val imageStream = response.body()!!.byteStream()
+                val image: Bitmap = BitmapFactory.decodeStream(imageStream)
+                itemsList[id].owner.avatar = image
+                adapter!!.notifyItemChanged(id)
+            }
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Log.e( "RepositoryService   ","Erro ao buscar avatar: ${t.message}")
+            }
+        })
     }
 
     override fun onDestroy() {
         super.onDestroy()
         compositeDisposable?.clear()
     }
-
-//    private fun getAvatar(avatarUrl: String, id: Int) {
-//
-//        val retrofitClient = Retrofit.Builder()
-//            .baseUrl("http://example.com/api/")
-//            .addConverterFactory(GsonConverterFactory.create())
-//            .build()
-//
-//        val endpoint = retrofitClient.create(RepositoryService::class.java)
-//        val callback = endpoint.getAvatar(avatarUrl)
-//
-//        callback.enqueue(object : Callback<ResponseBody> {
-//            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//                val imageStream = response.body()!!.byteStream()
-//                val image: Bitmap = BitmapFactory.decodeStream(imageStream)
-//                itemsList[id].owner.avatar = image
-//            }
-//            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-//                Log.e( "RepositoryService   ","Erro ao buscar avatar: ${t.message}")
-//            }
-//        })
-//    }
 }
 
