@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.gitrepos.R
@@ -23,17 +24,29 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class MainActivity : AppCompatActivity() {
+class ResultsActivity : AppCompatActivity() {
 
     private val baseUrl: String = "https://api.github.com/"
     private var itemsList: List<Item> = emptyList()
     private var adapter: RepositoryListAdapter? = null
     private var compositeDisposable: CompositeDisposable? = null
 
+//    private val lang: Spinner = search
+
+    private var language: String = ""
+    private var sortBy: String = ""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        val data: ArrayList<String>? = intent.extras!!.getStringArrayList("dados")
+        if (data != null) {
+            language = data[0]
+            sortBy = data[1]
+        }
+
 
         compositeDisposable = CompositeDisposable()
         initView()
@@ -53,7 +66,7 @@ class MainActivity : AppCompatActivity() {
             .build()
             .create(RepositoryService::class.java)
 
-        compositeDisposable?.add(retrofitClient.getRepositories("language:swift","stars")
+        compositeDisposable?.add(retrofitClient.getRepositories("language:${language}",sortBy)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeOn(Schedulers.io())
             .subscribe(this::handleResponse))

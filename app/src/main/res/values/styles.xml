@@ -8,4 +8,16 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <string-array name="languages">
+        <item>swift</item>
+        <item>java</item>
+        <item>kotlin</item>
+    </string-array>
+
+    <string-array name="sortTypes">
+        <item>stars</item>
+        <item>forks</item>
+        <item>updated</item>
+    </string-array>
+
 </resources>
