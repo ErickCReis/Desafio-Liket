@@ -6,6 +6,8 @@ apply plugin: 'kotlin-android-extensions'
 
 apply plugin: "androidx.navigation.safeargs"
 
+apply plugin: "kotlin-kapt"
+
 android {
     compileSdkVersion 29
     buildToolsVersion "29.0.3"
@@ -51,7 +53,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.11.0'
 
-    def room_version = "2.2.3"
+    def room_version = "2.2.4"
     implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
+    implementation "androidx.room:room-rxjava2:$room_version"
+    kapt "androidx.room:room-compiler:$room_version"
+
 }

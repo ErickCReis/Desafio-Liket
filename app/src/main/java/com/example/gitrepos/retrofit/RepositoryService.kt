@@ -14,6 +14,4 @@ interface RepositoryService {
     fun getRepositories(@Query("q") query: String,
                         @Query("sort") sort: String ): Observable<Repositories>
 
-    @GET
-    fun getAvatar(@Url url: String): Observable<Repositories>
 }
