@@ -6,5 +6,5 @@ data class Repositories (
     @SerializedName("total_count")
     var totalCount: Int,
     @SerializedName("items")
-    var items: List<Item>
+    var items: MutableList<Item>
 )

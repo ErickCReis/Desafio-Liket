@@ -15,5 +15,5 @@ interface RepositoryService {
                         @Query("sort") sort: String ): Observable<Repositories>
 
     @GET
-    fun getAvatar(@Url url: String): Call<ResponseBody>
+    fun getAvatar(@Url url: String): Observable<Repositories>
 }
