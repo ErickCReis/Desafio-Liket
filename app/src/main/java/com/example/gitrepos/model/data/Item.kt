@@ -17,5 +17,7 @@ data class Item (
     @SerializedName("owner")
     var owner: Owner,
     @SerializedName("stargazers_count")
-    var stargazersCount: Int
+    var stargazersCount: Int,
+    @SerializedName("html_url")
+    var link: String
 ) : Parcelable

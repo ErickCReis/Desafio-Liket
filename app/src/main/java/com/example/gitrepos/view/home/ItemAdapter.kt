@@ -7,14 +7,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
 import kotlinx.android.synthetic.main.repository_row.view.*
-import android.widget.ProgressBar
 import androidx.core.graphics.drawable.toBitmap
 import com.example.gitrepos.model.data.ItemsDatabase
 

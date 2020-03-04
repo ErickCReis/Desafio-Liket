@@ -1,8 +1,10 @@
 package com.example.gitrepos.view.details
 
 import android.content.Context
+import android.content.Intent
+import android.content.Intent.ACTION_VIEW
+import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,9 +33,14 @@ class DetailsFragment : Fragment(), DetailsView {
             requireActivity().onBackPressed()
         }
 
+        button.setOnClickListener {
+            val url = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItem(itemId).link
+            val link = Intent(ACTION_VIEW, Uri.parse(url))
+            startActivity(link)
+        }
+
         presenterDetails = getPresenter()
         presenterDetails.getData()
-
     }
 
     override fun onCreateView(
@@ -62,5 +69,4 @@ class DetailsFragment : Fragment(), DetailsView {
         val database = ItemsDatabase.getDatabase(requireContext())
         return DetailsPresenterImpl(this, itemId, database)
     }
-
 }

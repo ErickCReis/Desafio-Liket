@@ -2,10 +2,10 @@ package com.example.gitrepos.view.home
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -49,7 +49,33 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         presenterHome.showData()
+        home_toolbar.title = "Repositórios"
+        home_toolbar.inflateMenu(R.menu.menu)
+
+        home_toolbar.setOnMenuItemClickListener{
+            when (it.itemId) {
+                R.id.profile -> {
+                    findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
+                }
+            }
+            Log.d("Toolbar", "Click")
+            true
+        }
+
+
+
+        val search: SearchView = home_toolbar.findViewById(R.id.search)
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextChange(newText: String?): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+        })
     }
 
     override fun onCreateView(
