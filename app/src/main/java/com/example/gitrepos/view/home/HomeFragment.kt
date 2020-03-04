@@ -1,11 +1,11 @@
 package com.example.gitrepos.view.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,49 +21,46 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
     override fun clickItem(item: Item) {
         Log.d("click", item.name)
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item))
+        val itemId = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItemId(item.name)
+        Log.d("click", itemId.toString())
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item, itemId))
     }
 
     override fun loadList(items: MutableList<Item>) {
-        val adapter = ItemAdapter(items, requireContext(),this)
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
-        recyclerView.adapter = adapter
+        if(items.isEmpty()) {
+            Toast.makeText(requireContext(), "Sem dados e conexão", Toast.LENGTH_LONG).show()
+            progressBar.visibility = View.INVISIBLE
 
-        progressBar.visibility = View.INVISIBLE
-        recyclerView.visibility = View.VISIBLE
+        } else {
+            val adapter = ItemAdapter(items, requireContext(),this)
+            recyclerView.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+            recyclerView.adapter = adapter
+
+            progressBar.visibility = View.INVISIBLE
+            recyclerView.visibility = View.VISIBLE
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenterHome = getPresenter()
         presenterHome.getData()
-
-        Log.d("Home", ItemsDatabase.getDatabase(context!!).itemsDao().getAllItems().toString())
-
-//        val test = Items(null, "test", 1)
-//        dataBase.itemsDao().insert(test)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        presenterHome.showData()
     }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_main_fragment, container, false)
     }
 
-    @SuppressLint("WrongThread")
-    override fun onDestroy() {
-        super.onDestroy()
-        ItemsDatabase.getDatabase(requireContext()).clearAllTables()
-    }
-
     private fun getPresenter(): HomePresenter{
-        val database = ItemsDatabase.getDatabase(requireContext()).itemsDao()
+        val database = ItemsDatabase.getDatabase(requireContext())
         return HomePresenterImpl(this, database)
     }
 

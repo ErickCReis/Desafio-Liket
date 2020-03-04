@@ -1,32 +1,26 @@
 package com.example.gitrepos.view.details
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.bumptech.glide.Glide
 import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
+import com.example.gitrepos.model.data.ItemsDatabase
 import kotlinx.android.synthetic.main.fragment_details.*
 
+class DetailsFragment : Fragment(), DetailsView {
 
-class DetailsFragment : Fragment() {
+    lateinit var presenterDetails: DetailsPresenter
+    private var itemId: Int = 0
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-
-//        // This callback will only be called when MyFragment is at least Started.
-//        val callback = object : OnBackPressedCallback(true /* enabled by default */) {
-//            override fun handleOnBackPressed() {
-//                // Handle the back button event
-//            }
-//        }
-//        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
-
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        itemId = DetailsFragmentArgs.fromBundle(arguments!!).itemId
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,12 +31,8 @@ class DetailsFragment : Fragment() {
             requireActivity().onBackPressed()
         }
 
-        val item = DetailsFragmentArgs.fromBundle(arguments!!).item
-        Log.d("Details", item.name)
-
-        details_name.text = item.name
-        details_user.text = item.owner.login
-        details_stars.text = item.stargazersCount.toString()
+        presenterDetails = getPresenter()
+        presenterDetails.getData()
 
     }
 
@@ -50,8 +40,27 @@ class DetailsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_details, container, false)
+    }
+
+    override fun loadDetails(item: Item) {
+        details_name.text = item.name
+        details_user.text = item.owner.login
+        details_stars.text = item.stargazersCount.toString()
+        details_image.setImageBitmap(item.owner.avatar)
+
+        Glide.with(requireContext())
+            .asBitmap()
+            .load(item.owner.avatarUrl)
+            .circleCrop()
+            .placeholder(R.drawable.ic_radio_button)
+            .error(R.drawable.ic_error_black)
+            .into(details_image)
+    }
+
+    private fun getPresenter(): DetailsPresenter {
+        val database = ItemsDatabase.getDatabase(requireContext())
+        return DetailsPresenterImpl(this, itemId, database)
     }
 
 }

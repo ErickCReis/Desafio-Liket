@@ -12,23 +12,36 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:navigationIcon="@drawable/ic_arrow_back"/>
+        app:navigationIcon="@drawable/ic_arrow_back"
+        app:titleTextColor="#FFFFFF" />
 
     <TextView
         android:id="@+id/details_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="details_name" />
+        android:text="details_name"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
         android:id="@+id/details_user"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="details_name" />
+        android:text="details_user"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
 
     <TextView
         android:id="@+id/details_stars"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="details_name" />
+        android:text="details_stars"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
+
+    <ImageView
+        android:id="@+id/details_image"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        app:srcCompat="@drawable/ic_radio_button" />
 </LinearLayout>

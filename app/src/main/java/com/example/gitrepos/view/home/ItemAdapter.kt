@@ -1,6 +1,8 @@
 package com.example.gitrepos.view.home
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,6 +15,8 @@ import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
 import kotlinx.android.synthetic.main.repository_row.view.*
 import android.widget.ProgressBar
+import androidx.core.graphics.drawable.toBitmap
+import com.example.gitrepos.model.data.ItemsDatabase
 
 
 class ItemAdapter(private val list: MutableList<Item>,
@@ -39,25 +43,23 @@ class ItemAdapter(private val list: MutableList<Item>,
         Glide.with(context)
             .asBitmap()
             .load(model.owner.avatarUrl)
+            .circleCrop()
+            .placeholder(R.drawable.ic_radio_button)
+            .error(R.drawable.ic_error_black)
             .into(holder.image)
 
         holder.itemView.setOnClickListener {
-            Log.d("Holder", "Teste")
             listener.clickItem(model)
         }
-
     }
 
     class ViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-
         val userText: TextView = itemView.userText
         val projectText: TextView = itemView.projectText
         val starsText: TextView = itemView.starsText
 
         val image: ImageView = itemView.imageView
-
         val progressBar: ProgressBar = itemView.imageProgressBar
-
     }
 
     interface OnClickListener {

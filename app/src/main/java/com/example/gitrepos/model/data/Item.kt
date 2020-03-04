@@ -10,7 +10,8 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 @Entity
 data class Item (
-    @PrimaryKey var id: Int?,
+    @PrimaryKey(autoGenerate = true)
+    var id: Int?,
     @SerializedName("name")
     var name: String,
     @SerializedName("owner")
