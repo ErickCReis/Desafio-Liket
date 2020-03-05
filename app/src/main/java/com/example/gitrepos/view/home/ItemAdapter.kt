@@ -1,8 +1,6 @@
 package com.example.gitrepos.view.home
 
 import android.content.Context
-import android.graphics.Bitmap
-import android.os.AsyncTask
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -13,14 +11,13 @@ import com.bumptech.glide.Glide
 import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
 import kotlinx.android.synthetic.main.repository_row.view.*
-import androidx.core.graphics.drawable.toBitmap
-import com.example.gitrepos.model.data.ItemsDatabase
 
-
-class ItemAdapter(private val list: MutableList<Item>,
+class ItemAdapter(private var list: MutableList<Item>,
                   private val context: Context,
                   private val listener: OnClickListener
-): RecyclerView.Adapter<ItemAdapter.ViewHolder>() {
+): RecyclerView.Adapter<ItemAdapter.ViewHolder>(), Filterable {
+
+    var filterList = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.repository_row, parent, false)
@@ -62,5 +59,28 @@ class ItemAdapter(private val list: MutableList<Item>,
 
     interface OnClickListener {
         fun clickItem(item: Item)
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun publishResults(charSequence: CharSequence?, filterResults: FilterResults) {
+                Log.d("Filter", "Filter")
+                list = filterResults.values as MutableList<Item>
+                notifyDataSetChanged()
+            }
+
+            override fun performFiltering(charSequence: CharSequence?): FilterResults {
+                val queryString = charSequence?.toString()?.toLowerCase()
+
+                val filterResults = FilterResults()
+                filterResults.values = if (queryString==null || queryString.isEmpty())
+                    filterList
+                else
+                    filterList.filter { it.name.toLowerCase().contains(queryString) ||
+                            it.owner.login.toLowerCase().contains(queryString)
+                    }
+                return filterResults
+            }
+        }
     }
 }
