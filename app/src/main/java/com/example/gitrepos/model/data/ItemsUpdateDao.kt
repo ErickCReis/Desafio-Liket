@@ -1,12 +1,17 @@
 package com.example.gitrepos.model.data
 
 import androidx.room.*
+import io.reactivex.Completable
+import io.reactivex.Observable
 
 @Dao
-interface ItemsDao {
+interface ItemsUpdateDao {
 
     @Insert
-    fun insert(item: MutableList<Item>)
+    fun insert(item: MutableList<Item>): Completable
+
+    @Update(onConflict = OnConflictStrategy.REPLACE)
+    fun update(item: Item): Completable
 
     @Query("SELECT * fROM item WHERE id == :id LIMIT 1")
     fun getItem(id: Int): Item
@@ -15,5 +20,5 @@ interface ItemsDao {
     fun getItemId(name: String): Int
 
     @Query("SELECT * FROM item ORDER BY stargazersCount DESC")
-    fun getAllItems(): MutableList<Item>
+    fun getAllItems(): Observable<MutableList<Item>>
 }

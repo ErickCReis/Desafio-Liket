@@ -4,14 +4,11 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.Menu
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ActionMenuView
 import android.widget.SearchView
 import android.widget.Toast
-import androidx.appcompat.view.menu.ActionMenuItem
-import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,9 +16,13 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
 import com.example.gitrepos.model.data.ItemsDatabase
+import com.example.gitrepos.presenter.ItemPresenter
 import kotlinx.android.synthetic.main.fragment_main_fragment.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class HomeFragment : Fragment(), ItemAdapter.OnClickListener,HomeView {
+class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
+
+    val itemPresenter: ItemPresenter by viewModel()
 
     lateinit var presenterHome: HomePresenter
     private var adapter: ItemAdapter? = null
@@ -51,18 +52,29 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener,HomeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenterHome = getPresenter()
+        presenterHome.setView(itemPresenter, this)
         presenterHome.getData()
+
+
+
     }
 
     @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        swipe.setOnRefreshListener {
+            swipe.isRefreshing = false
+            presenterHome.getData()
+            presenterHome.showData()
+        }
+
         presenterHome.showData()
 
         home_toolbar.title = "Repositórios"
         home_toolbar.inflateMenu(R.menu.menu)
         home_toolbar.setOnMenuItemClickListener{
+            Log.d("Toolbar", "Click")
             when (it.itemId) {
                 R.id.profile -> {
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
@@ -83,7 +95,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener,HomeView {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d("SearchSubmit", query!!)
                 adapter!!.filter.filter(query)
-                search.isIconifiedByDefault = true
                 return false
             }
         })
