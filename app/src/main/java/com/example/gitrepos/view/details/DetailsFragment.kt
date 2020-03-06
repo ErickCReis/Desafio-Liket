@@ -5,9 +5,11 @@ import android.content.Intent
 import android.content.Intent.ACTION_VIEW
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.gitrepos.R
@@ -32,11 +34,24 @@ class DetailsFragment : Fragment(), DetailsView {
         toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
+        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
         button.setOnClickListener {
             val url = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItem(itemId).link
             val link = Intent(ACTION_VIEW, Uri.parse(url))
             startActivity(link)
+        }
+
+        update_button.setOnClickListener {
+            val nome = details_name_edit.text.toString()
+            Log.d("UpdateButton", nome)
+
+            if(nome != "") {
+                val item = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItem(itemId)
+                item.name = nome
+                ItemsDatabase.getDatabase(requireContext()).itemsDao().update(item)
+                activity!!.onBackPressed()
+            }
         }
 
         presenterDetails = getPresenter()

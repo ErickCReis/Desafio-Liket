@@ -9,8 +9,8 @@ class MyAplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        Stetho.initializeWithDefaults(this)
+//        Stetho.initializeWithDefaults(this)
 
-        startKoin(this, listOf(appModule))
+//        startKoin(this, listOf(appModule))
     }
 }

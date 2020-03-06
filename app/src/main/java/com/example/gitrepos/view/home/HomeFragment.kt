@@ -22,9 +22,9 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
-    val itemPresenter: ItemPresenter by viewModel()
+    private val itemPresenter: ItemPresenter by viewModel()
 
-    lateinit var presenterHome: HomePresenter
+    private lateinit var presenterHome: HomePresenter
     private var adapter: ItemAdapter? = null
 
     override fun clickItem(item: Item) {
@@ -36,7 +36,7 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
     override fun loadList(items: MutableList<Item>) {
         if(items.isEmpty()) {
-            Toast.makeText(requireContext(), "Sem dados e conexão", Toast.LENGTH_LONG).show()
+            Toast.makeText(requireContext(), "Sem dados", Toast.LENGTH_LONG).show()
             progressBar.visibility = View.INVISIBLE
 
         } else {
@@ -52,11 +52,8 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenterHome = getPresenter()
-        presenterHome.setView(itemPresenter, this)
-        presenterHome.getData()
-
-
-
+        //presenterHome.setView(itemPresenter, this)
+        //presenterHome.getData()
     }
 
     @SuppressLint("RestrictedApi")
@@ -64,9 +61,9 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         super.onViewCreated(view, savedInstanceState)
 
         swipe.setOnRefreshListener {
+            Log.d("Swipe", "Updated")
             swipe.isRefreshing = false
             presenterHome.getData()
-            presenterHome.showData()
         }
 
         presenterHome.showData()
@@ -88,13 +85,22 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 Log.d("Search", newText!!)
-                adapter!!.filter.filter(newText)
+                val search = "%$newText%"
+                val itemsFilter = ItemsDatabase.getDatabase(requireContext())
+                                                .itemsDao().getFilteredItems(search)
+
+                Log.d("SearchResult", itemsFilter.toString())
+                presenterHome.showFilteredData(itemsFilter)
+//                adapter!!.filter.filter(newText)
                 return true
             }
 
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d("SearchSubmit", query!!)
-                adapter!!.filter.filter(query)
+                val itemsFilter = ItemsDatabase.getDatabase(requireContext())
+                    .itemsDao().getFilteredItems(query)
+                presenterHome.showFilteredData(itemsFilter)
+//                adapter!!.filter.filter(query)
                 return false
             }
         })
