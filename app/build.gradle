@@ -77,6 +77,4 @@ dependencies {
     ext.koin_version = '1.0.2'
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-androidx-viewmodel:$koin_version"
-
-
 }

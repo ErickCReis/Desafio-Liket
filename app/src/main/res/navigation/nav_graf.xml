@@ -23,11 +23,11 @@
         android:name="com.example.gitrepos.view.details.DetailsFragment"
         android:label="DetailsFragment" >
         <argument
-            android:name="item"
-            app:argType="com.example.gitrepos.model.data.Item" />
-        <argument
             android:name="itemId"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_detailsFragment_to_myDialogFragment"
+            app:destination="@id/myDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
@@ -39,4 +39,8 @@
         android:name="com.example.gitrepos.view.about.AboutFragment"
         android:label="fragment_about"
         tools:layout="@layout/fragment_about" />
+    <dialog
+        android:id="@+id/myDialogFragment"
+        android:name="com.example.gitrepos.view.details.MyDialogFragment"
+        android:label="MyDialogFragment" />
 </navigation>

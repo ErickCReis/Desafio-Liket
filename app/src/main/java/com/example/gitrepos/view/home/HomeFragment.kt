@@ -7,8 +7,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
-import android.widget.Toast
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,31 +20,24 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
-    private val itemPresenter: ItemPresenter by viewModel()
+    // private val itemPresenter: ItemPresenter by viewModel()
 
     private lateinit var presenterHome: HomePresenter
     private var adapter: ItemAdapter? = null
 
     override fun clickItem(item: Item) {
-        Log.d("click", item.name)
-        val itemId = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItemId(item.name)
-        Log.d("click", itemId.toString())
-        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item, itemId))
+        Log.d("click", item.name + item.id)
+        findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToDetailsFragment(item.id!!))
     }
 
     override fun loadList(items: MutableList<Item>) {
-        if(items.isEmpty()) {
-            Toast.makeText(requireContext(), "Sem dados", Toast.LENGTH_LONG).show()
-            progressBar.visibility = View.INVISIBLE
 
-        } else {
-            adapter = ItemAdapter(items, requireContext(),this)
-            recyclerView.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
-            recyclerView.adapter = adapter
+        adapter = ItemAdapter(items, requireContext(),this)
+        recyclerView.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
+        recyclerView.adapter = adapter
 
-            progressBar.visibility = View.INVISIBLE
-            recyclerView.visibility = View.VISIBLE
-        }
+        progressBar.visibility = View.INVISIBLE
+        recyclerView.visibility = View.VISIBLE
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +47,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         //presenterHome.getData()
     }
 
-    @SuppressLint("RestrictedApi")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -85,9 +75,8 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextChange(newText: String?): Boolean {
                 Log.d("Search", newText!!)
-                val search = "%$newText%"
                 val itemsFilter = ItemsDatabase.getDatabase(requireContext())
-                                                .itemsDao().getFilteredItems(search)
+                    .itemsDao().getFilteredItems("%$newText%")
 
                 Log.d("SearchResult", itemsFilter.toString())
                 presenterHome.showFilteredData(itemsFilter)
@@ -98,7 +87,7 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 Log.d("SearchSubmit", query!!)
                 val itemsFilter = ItemsDatabase.getDatabase(requireContext())
-                    .itemsDao().getFilteredItems(query)
+                    .itemsDao().getFilteredItems("%$query%")
                 presenterHome.showFilteredData(itemsFilter)
 //                adapter!!.filter.filter(query)
                 return false
@@ -117,5 +106,4 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         val database = ItemsDatabase.getDatabase(requireContext())
         return HomePresenterImpl(this, database)
     }
-
 }

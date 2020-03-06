@@ -10,7 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.gitrepos.R
 import com.example.gitrepos.model.data.Item
@@ -19,7 +21,7 @@ import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment(), DetailsView {
 
-    lateinit var presenterDetails: DetailsPresenter
+    private lateinit var presenterDetails: DetailsPresenter
     private var itemId: Int = 0
 
     override fun onAttach(context: Context) {
@@ -52,6 +54,10 @@ class DetailsFragment : Fragment(), DetailsView {
                 ItemsDatabase.getDatabase(requireContext()).itemsDao().update(item)
                 activity!!.onBackPressed()
             }
+        }
+
+        photo.setOnClickListener {
+            findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMyDialogFragment())
         }
 
         presenterDetails = getPresenter()
