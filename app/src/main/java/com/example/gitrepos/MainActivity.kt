@@ -5,7 +5,7 @@ import android.os.Bundle
 import androidx.navigation.findNavController
 import com.facebook.stetho.Stetho
 
-class MainActivity2 : AppCompatActivity() {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

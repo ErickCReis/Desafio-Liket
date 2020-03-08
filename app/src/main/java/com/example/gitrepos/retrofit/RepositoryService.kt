@@ -10,6 +10,4 @@ interface RepositoryService {
     @GET("search/repositories")
     fun getRepositories(@Query("q") query: String,
                         @Query("sort") sort: String ): Observable<Repositories>
-
-
 }

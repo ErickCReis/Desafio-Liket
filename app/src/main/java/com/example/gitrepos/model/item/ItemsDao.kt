@@ -1,4 +1,4 @@
-package com.example.gitrepos.model.data
+package com.example.gitrepos.model.item
 
 import androidx.room.*
 

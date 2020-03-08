@@ -23,18 +23,22 @@ class MyDialogFragment : DialogFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        return inflater.inflate(R.layout.fragment_dialog, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         camera.setOnClickListener {
             Log.d("Dialog", "Camera")
         }
 
         galery.setOnClickListener {
-            //val galleryIntent = Intent(Intent.ACTION_PICK,
-             //   MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+            val galleryIntent = Intent(Intent.ACTION_PICK,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
 
-            //startActivityForResult(galleryIntent, 1)
+            startActivityForResult(galleryIntent, 1)
         }
 
-        return inflater.inflate(R.layout.fragment_dialog, container, false)
     }
 }

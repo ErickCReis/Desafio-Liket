@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.gitrepos.R
-import com.example.gitrepos.model.data.Item
+import com.example.gitrepos.model.item.Item
 import kotlinx.android.synthetic.main.repository_row.view.*
 
 class ItemAdapter(private var list: MutableList<Item>,

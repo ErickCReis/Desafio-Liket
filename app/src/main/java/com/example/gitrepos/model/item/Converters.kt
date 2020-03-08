@@ -1,4 +1,4 @@
-package com.example.gitrepos.model.data
+package com.example.gitrepos.model.item
 
 import androidx.room.TypeConverter
 import com.example.gitrepos.model.Owner

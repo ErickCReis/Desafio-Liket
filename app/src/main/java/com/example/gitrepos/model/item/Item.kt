@@ -1,4 +1,4 @@
-package com.example.gitrepos.model.data
+package com.example.gitrepos.model.item
 
 import android.os.Parcelable
 import androidx.room.Entity
@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 @Entity
-data class Item (
+data class  Item (
     @PrimaryKey(autoGenerate = true)
     var id: Int?,
     @SerializedName("name")

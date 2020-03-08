@@ -10,6 +10,5 @@ data class Owner (
     @SerializedName("login")
     val login: String,
     @SerializedName("avatar_url")
-    val avatarUrl: String,
-    var avatar: Bitmap?
+    val avatarUrl: String
 ): Parcelable

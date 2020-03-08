@@ -1,6 +1,5 @@
 package com.example.gitrepos.view.home
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,15 +11,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.gitrepos.R
-import com.example.gitrepos.model.data.Item
-import com.example.gitrepos.model.data.ItemsDatabase
-import com.example.gitrepos.presenter.ItemPresenter
+import com.example.gitrepos.model.item.Item
+import com.example.gitrepos.model.item.ItemsDatabase
 import kotlinx.android.synthetic.main.fragment_main_fragment.*
-import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
-
-    // private val itemPresenter: ItemPresenter by viewModel()
 
     private lateinit var presenterHome: HomePresenter
     private var adapter: ItemAdapter? = null
@@ -43,8 +38,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         presenterHome = getPresenter()
-        //presenterHome.setView(itemPresenter, this)
-        //presenterHome.getData()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -80,7 +73,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
                 Log.d("SearchResult", itemsFilter.toString())
                 presenterHome.showFilteredData(itemsFilter)
-//                adapter!!.filter.filter(newText)
                 return true
             }
 
@@ -89,7 +81,6 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
                 val itemsFilter = ItemsDatabase.getDatabase(requireContext())
                     .itemsDao().getFilteredItems("%$query%")
                 presenterHome.showFilteredData(itemsFilter)
-//                adapter!!.filter.filter(query)
                 return false
             }
         })

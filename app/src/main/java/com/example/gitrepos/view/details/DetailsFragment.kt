@@ -10,13 +10,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
-import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.example.gitrepos.R
-import com.example.gitrepos.model.data.Item
-import com.example.gitrepos.model.data.ItemsDatabase
+import com.example.gitrepos.model.item.Item
+import com.example.gitrepos.model.item.ItemsDatabase
 import kotlinx.android.synthetic.main.fragment_details.*
 
 class DetailsFragment : Fragment(), DetailsView {
@@ -75,7 +74,6 @@ class DetailsFragment : Fragment(), DetailsView {
         details_name.text = item.name
         details_user.text = item.owner.login
         details_stars.text = item.stargazersCount.toString()
-        details_image.setImageBitmap(item.owner.avatar)
 
         Glide.with(requireContext())
             .asBitmap()

@@ -13,13 +13,13 @@ import java.util.concurrent.TimeUnit
 /**
  * Created by RonnyeryDev on 06/03/2018.
  */
-class RetrofitBuilder (val url: String)
+class RetrofitBuilder ()
 {
 
     /**
      * URL REQUEST
      */
-    private  var BASE_URL = "https://api.github.com/"
+    private  var baseURL = "https://api.github.com/"
 
     /**
      * Init Client
@@ -35,7 +35,7 @@ class RetrofitBuilder (val url: String)
     /**
      * Request
      */
-    fun builderClient(): OkHttpClient
+    private fun builderClient(): OkHttpClient
     {
 
         val logging = HttpLoggingInterceptor()
@@ -64,7 +64,6 @@ class RetrofitBuilder (val url: String)
         }
 
         return builder.build()
-
     }
 
     /**
@@ -72,13 +71,12 @@ class RetrofitBuilder (val url: String)
      */
     private fun buildRetrofit(client: OkHttpClient): Retrofit {
         return Retrofit.Builder()
-                .baseUrl(url)
+                .baseUrl(baseURL)
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .client(client)
                 .addConverterFactory(GsonConverterFactory.create())
                 .build()
     }
-
 
     /**
      * Get Retrofit
