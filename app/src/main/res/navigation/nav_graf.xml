@@ -34,6 +34,6 @@
     </fragment>
     <dialog
         android:id="@+id/myDialogFragment"
-        android:name="com.example.gitrepos.view.details.MyDialogFragment"
+        android:name="com.example.gitrepos.view.profile.MyDialogFragment"
         android:label="MyDialogFragment" />
 </navigation>
