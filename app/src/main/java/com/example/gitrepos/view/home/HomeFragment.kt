@@ -64,9 +64,8 @@ class HomeFragment : Fragment(), ListItemsAdapter.OnClickListener, HomeView {
             Log.d("Toolbar", "Click")
             when (it.itemId) {
                 R.id.profile -> {
-                    var profile = ProfilesDatabase.getDatabase(requireContext()).profilesDao().getProfile()
-                    if (profile.name == "") {
-                        profile = Profile(1, "name", "login", "avatarUrl", "link")
+                    if (ProfilesDatabase.getDatabase(requireContext()).profilesDao().getProfile() == null) {
+                        val profile = Profile(1, "name", "login", "avatarUrl", null ,"link")
                         ProfilesDatabase.getDatabase(requireContext()).profilesDao().insert(profile)
                     }
 

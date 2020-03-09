@@ -1,7 +1,9 @@
 package com.example.gitrepos.view.profile
 
 
+import android.content.Context
 import android.content.Intent
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -73,16 +75,31 @@ class ProfileFragment : Fragment(), ProfileView {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenterProfile.showData()
+    }
+
+
+
     override fun loadProfile(profile: Profile) {
         profile_name.text = profile.name
 
-        Glide.with(requireContext())
-            .asBitmap()
-            .load(profile.avatarUrl)
-            .circleCrop()
-            .placeholder(R.drawable.ic_radio_button)
-            .error(R.drawable.ic_error_black)
-            .into(profile_image)
+        if(profile.avatar == null) {
+            Glide.with(requireContext())
+                .asBitmap()
+                .load(profile.avatarUrl)
+                .circleCrop()
+                .placeholder(R.drawable.ic_radio_button)
+                .error(R.drawable.ic_error_black)
+                .into(profile_image)
+        } else {
+            val bitmap = BitmapFactory.decodeByteArray(
+                profile.avatar, 0,
+                profile.avatar!!.size
+            )
+            profile_image.setImageBitmap(bitmap)
+        }
 
     }
 

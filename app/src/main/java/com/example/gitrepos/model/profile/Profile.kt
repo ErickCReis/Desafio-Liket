@@ -1,5 +1,6 @@
 package com.example.gitrepos.model.profile
 
+import android.graphics.Bitmap
 import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
@@ -17,6 +18,7 @@ data class Profile (
     var login: String,
     @SerializedName("avatar_url")
     var avatarUrl: String,
+    var avatar: ByteArray?,
     @SerializedName("html_url")
     var link: String
 ) : Parcelable

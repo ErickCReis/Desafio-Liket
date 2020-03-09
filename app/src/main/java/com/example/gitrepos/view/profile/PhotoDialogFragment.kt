@@ -1,10 +1,9 @@
 package com.example.gitrepos.view.profile
 
 import android.app.Activity
-import android.app.Dialog
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Log
@@ -13,9 +12,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import com.example.gitrepos.R
+import com.example.gitrepos.model.profile.ProfilesDatabase
 import kotlinx.android.synthetic.main.fragment_dialog.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import java.lang.Exception
+import java.io.ByteArrayOutputStream
 
 
 class MyDialogFragment : DialogFragment() {
@@ -49,14 +48,34 @@ class MyDialogFragment : DialogFragment() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        //super.onActivityResult(requestCode, resultCode, data)
         try {
             if (requestCode == CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE) {
                 if (resultCode == Activity.RESULT_OK && data != null) {
 
-                    val image: Bitmap = data.extras!!.<Bitmap>get("data")
-                    profile_image.setImageBitmap(image)
-                    Log.d("DialogResult", image.toString())
+                    val stream = ByteArrayOutputStream()
+                    val bmp = data.extras!!["data"] as Bitmap?
+                    bmp!!.compress(Bitmap.CompressFormat.PNG, 100, stream)
+                    val byteArray: ByteArray = stream.toByteArray()
+
+                    saveAvatar(byteArray)
+                }
+            }
+
+            if (requestCode == GALLERY_ACTIVITY_REQUEST_CODE) {
+                if (resultCode == Activity.RESULT_OK && data != null) {
+
+
+                    val stream = ByteArrayOutputStream()
+                    val returnUri: Uri? = data.data
+                    val bmp = MediaStore.Images.Media.getBitmap(
+                        activity!!.contentResolver,
+                        returnUri
+                    )
+                    bmp!!.compress(Bitmap.CompressFormat.JPEG, 50, stream)
+                    val byteArray: ByteArray = stream.toByteArray()
+
+                    saveAvatar(byteArray)
+
                 }
             }
         }
@@ -64,5 +83,11 @@ class MyDialogFragment : DialogFragment() {
 
         }
 
+    }
+
+    private fun saveAvatar(byteArray: ByteArray){
+        val profile = ProfilesDatabase.getDatabase(requireContext()).profilesDao().getProfile()
+        profile.avatar = byteArray
+        ProfilesDatabase.getDatabase(requireContext()).profilesDao().update(profile)
     }
 }
