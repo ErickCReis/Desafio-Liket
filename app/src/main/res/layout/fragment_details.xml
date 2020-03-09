@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+        android:id="@+id/details_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
@@ -46,29 +46,9 @@
         app:srcCompat="@drawable/ic_radio_button" />
 
     <Button
-        android:id="@+id/photo"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Tirar Foto" />
-
-    <Button
-        android:id="@+id/button"
+        android:id="@+id/link_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Link GitHub" />
-
-    <EditText
-        android:id="@+id/details_name_edit"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:singleLine="true"
-        android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-    <Button
-        android:id="@+id/update_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Atualizar Nome" />
 
 </LinearLayout>

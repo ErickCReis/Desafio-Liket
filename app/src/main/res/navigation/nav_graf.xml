@@ -14,9 +14,6 @@
         <action
             android:id="@+id/action_homeFragment_to_profileFragment"
             app:destination="@id/profileFragment" />
-        <action
-            android:id="@+id/action_homeFragment_to_aboutFragment"
-            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/detailsFragment"
@@ -25,20 +22,16 @@
         <argument
             android:name="itemId"
             app:argType="integer" />
-        <action
-            android:id="@+id/action_detailsFragment_to_myDialogFragment"
-            app:destination="@id/myDialogFragment" />
     </fragment>
     <fragment
         android:id="@+id/profileFragment"
         android:name="com.example.gitrepos.view.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
-    <fragment
-        android:id="@+id/aboutFragment"
-        android:name="com.example.gitrepos.view.about.AboutFragment"
-        android:label="fragment_about"
-        tools:layout="@layout/fragment_about" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_profileFragment_to_myDialogFragment"
+            app:destination="@id/myDialogFragment" />
+    </fragment>
     <dialog
         android:id="@+id/myDialogFragment"
         android:name="com.example.gitrepos.view.details.MyDialogFragment"

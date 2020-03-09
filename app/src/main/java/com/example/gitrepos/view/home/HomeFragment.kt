@@ -13,12 +13,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.gitrepos.R
 import com.example.gitrepos.model.item.Item
 import com.example.gitrepos.model.item.ItemsDatabase
-import kotlinx.android.synthetic.main.fragment_main_fragment.*
+import com.example.gitrepos.model.profile.Profile
+import com.example.gitrepos.model.profile.ProfilesDatabase
+import com.example.gitrepos.view.home.adapter.ListItemsAdapter
+import kotlinx.android.synthetic.main.fragment_home.*
 
-class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
+class HomeFragment : Fragment(), ListItemsAdapter.OnClickListener, HomeView {
 
     private lateinit var presenterHome: HomePresenter
-    private var adapter: ItemAdapter? = null
+    private var adapter: ListItemsAdapter? = null
 
     override fun clickItem(item: Item) {
         Log.d("click", item.name + item.id)
@@ -27,7 +30,11 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
 
     override fun loadList(items: MutableList<Item>) {
 
-        adapter = ItemAdapter(items, requireContext(),this)
+        adapter = ListItemsAdapter(
+            items,
+            requireContext(),
+            this
+        )
         recyclerView.layoutManager = LinearLayoutManager(requireActivity(), RecyclerView.VERTICAL, false)
         recyclerView.adapter = adapter
 
@@ -43,9 +50,9 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        swipe.setOnRefreshListener {
+        swipe_home.setOnRefreshListener {
             Log.d("Swipe", "Updated")
-            swipe.isRefreshing = false
+            swipe_home.isRefreshing = false
             presenterHome.getData()
         }
 
@@ -57,6 +64,12 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
             Log.d("Toolbar", "Click")
             when (it.itemId) {
                 R.id.profile -> {
+                    var profile = ProfilesDatabase.getDatabase(requireContext()).profilesDao().getProfile()
+                    if (profile.name == "") {
+                        profile = Profile(1, "name", "login", "avatarUrl", "link")
+                        ProfilesDatabase.getDatabase(requireContext()).profilesDao().insert(profile)
+                    }
+
                     findNavController().navigate(HomeFragmentDirections.actionHomeFragmentToProfileFragment())
                 }
             }
@@ -90,7 +103,7 @@ class HomeFragment : Fragment(), ItemAdapter.OnClickListener, HomeView {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.fragment_main_fragment, container, false)
+        return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
     private fun getPresenter(): HomePresenter{

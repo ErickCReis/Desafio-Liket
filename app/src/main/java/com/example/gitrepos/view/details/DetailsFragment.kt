@@ -31,36 +31,19 @@ class DetailsFragment : Fragment(), DetailsView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        toolbar.title = getString(R.string.tool_detalis)
-        toolbar.setNavigationOnClickListener {
+        presenterDetails = getPresenter()
+        presenterDetails.getData()
+
+        details_toolbar.title = "Detalhes"
+        details_toolbar.setNavigationOnClickListener {
             requireActivity().onBackPressed()
         }
-        activity!!.window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
 
-        button.setOnClickListener {
+        link_button.setOnClickListener {
             val url = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItem(itemId).link
             val link = Intent(ACTION_VIEW, Uri.parse(url))
             startActivity(link)
         }
-
-        update_button.setOnClickListener {
-            val nome = details_name_edit.text.toString()
-            Log.d("UpdateButton", nome)
-
-            if(nome != "") {
-                val item = ItemsDatabase.getDatabase(requireContext()).itemsDao().getItem(itemId)
-                item.name = nome
-                ItemsDatabase.getDatabase(requireContext()).itemsDao().update(item)
-                activity!!.onBackPressed()
-            }
-        }
-
-        photo.setOnClickListener {
-            findNavController().navigate(DetailsFragmentDirections.actionDetailsFragmentToMyDialogFragment())
-        }
-
-        presenterDetails = getPresenter()
-        presenterDetails.getData()
     }
 
     override fun onCreateView(

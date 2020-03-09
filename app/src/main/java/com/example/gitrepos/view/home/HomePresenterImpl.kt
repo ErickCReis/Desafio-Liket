@@ -3,8 +3,8 @@ package com.example.gitrepos.view.home
 import com.example.gitrepos.model.Repositories
 import com.example.gitrepos.model.item.Item
 import com.example.gitrepos.model.item.ItemsDatabase
-import com.example.gitrepos.retrofit.RepositoryService
-import com.example.gitrepos.retrofit.RetrofitBuilder
+import com.example.gitrepos.network.RepositoryService
+import com.example.gitrepos.network.RetrofitBuilder
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers

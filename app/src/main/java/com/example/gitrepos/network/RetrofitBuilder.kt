@@ -1,4 +1,4 @@
-package com.example.gitrepos.retrofit
+package com.example.gitrepos.network
 
 import com.example.gitrepos.BuildConfig
 import com.facebook.stetho.okhttp3.StethoInterceptor

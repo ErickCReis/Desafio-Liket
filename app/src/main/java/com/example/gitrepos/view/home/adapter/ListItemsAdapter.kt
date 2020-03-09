@@ -1,4 +1,4 @@
-package com.example.gitrepos.view.home
+package com.example.gitrepos.view.home.adapter
 
 import android.content.Context
 import android.util.Log
@@ -12,16 +12,18 @@ import com.example.gitrepos.R
 import com.example.gitrepos.model.item.Item
 import kotlinx.android.synthetic.main.repository_row.view.*
 
-class ItemAdapter(private var list: MutableList<Item>,
-                  private val context: Context,
-                  private val listener: OnClickListener
-): RecyclerView.Adapter<ItemAdapter.ViewHolder>(), Filterable {
+class ListItemsAdapter(private var list: MutableList<Item>,
+                       private val context: Context,
+                       private val listener: OnClickListener
+): RecyclerView.Adapter<ListItemsAdapter.ViewHolder>(), Filterable {
 
     var filterList = list
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(context).inflate(R.layout.repository_row, parent, false)
-        return ViewHolder(view)
+        return ViewHolder(
+            view
+        )
     }
 
     override fun getItemCount(): Int {
